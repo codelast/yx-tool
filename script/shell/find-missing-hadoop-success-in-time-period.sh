@@ -26,7 +26,7 @@ while true; do
 
   hadoop fs -test -e $HDFS_DIR/$DATE/_SUCCESS
   if [ $? -ne 0 ]; then
-    echo "missing _SUCCESS file for date $DATE"
+    echo "+++ missing _SUCCESS file for date $DATE"
   fi
   COUNT=$(($COUNT+1))
   if [ $COUNT -eq 10 ]; then
