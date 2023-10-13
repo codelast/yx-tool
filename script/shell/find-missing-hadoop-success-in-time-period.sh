@@ -13,6 +13,11 @@ HDFS_DIR=$3  # Hadoop父目录，e.g. "/user/hadoop/export-sample"
 
 echo "start date: $START_DATE, end date: $END_DATE"
 
+# 如果 HDFS_DIR 以 "/" 结尾，则删除掉结尾的 "/"
+if [ "${HDFS_DIR: -1}" == "/" ]; then
+  HDFS_DIR=${HDFS_DIR:0:-1}
+fi
+
 COUNT=0  # 计数器，用于每检查了10天的数据就打印一次进度
 FOUND_ONE_MISSING=0  # 至少找到了一个缺失的文件
 DATE=`date -d "$START_DATE 1 day ago" +%F`  # 起始日期往前挪一天，由后面的计算方式决定
