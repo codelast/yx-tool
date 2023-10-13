@@ -14,6 +14,7 @@ HDFS_DIR=$3  # Hadoop父目录，e.g. "/user/hadoop/export-sample"
 echo "start date: $START_DATE, end date: $END_DATE"
 
 COUNT=0  # 计数器，用于每检查了10天的数据就打印一次进度
+FOUND_ONE_MISSING=0  # 至少找到了一个缺失的文件
 DATE=`date -d "$START_DATE 1 day ago" +%F`  # 起始日期往前挪一天，由后面的计算方式决定
 END_DATE=`date -d "$END_DATE -1 day ago" +%F`  # 结束日期往后挪一天，由后面的计算方式决定
 while true; do
@@ -27,6 +28,7 @@ while true; do
   hadoop fs -test -e $HDFS_DIR/$DATE/_SUCCESS
   if [ $? -ne 0 ]; then
     echo "+++ missing _SUCCESS file for date $DATE"
+    FOUND_ONE_MISSING=1
   fi
   COUNT=$(($COUNT+1))
   if [ $COUNT -eq 10 ]; then
@@ -34,3 +36,7 @@ while true; do
     COUNT=0
   fi
 done
+
+if [ $FOUND_ONE_MISSING -eq 0 ]; then
+  echo "no missing file found"
+fi
