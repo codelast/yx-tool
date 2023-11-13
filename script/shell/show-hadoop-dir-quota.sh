@@ -1,6 +1,13 @@
 #!/bin/bash
 # 打印指定用户或当前用户的Hadoop目录配额。
 
+# 检查hadoop命令是否可用
+hadoop version > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  echo "hadoop命令不可用，无法继续"
+  exit 1
+fi
+
 # 显示提示信息
 echo "你想按什么统计quota："
 echo "1) 指定用户名"
